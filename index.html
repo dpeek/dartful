@@ -1,8 +1,97 @@
 <html>
 <head>
-	<title>Coming soon...</title>
+  <title>Dartful</title>
+  <link href='styles.css' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
+  <div id='content'>
+    <header id='banner'>
+      <h1>Dartful</h1>
+    </header>
+    <article><header><h1>Setup and Research</h1><span>Monday, 18 February 2013</span></header><div><p>The <a href="http://www.dartlang.org/downloads.html">documentation</a> of the Dart website for installation and setup is 
+great, and since I didn't have any problems I don't have much to add. In no 
+time at all, I was skimming through the tutorials, playing with futures from 
+dart:async and writting my first HelloWorld HttpServer with rikulo. Rikulo 
+introduced the idea of a project <code>build.dart</code> where I could define build tasks, 
+A good place to start roughing out the peices of my blog engine.</p>
+<p>The build script is executed when files in your project change, and can also be 
+configured using the option parsing library from the Dart Team. This should 
+allow me to define some tasks for creating pages and posts, previewing and 
+publishing the site.</p>
+<p>Here's a pseudo-code version of the generator:</p>
+<pre><span class="k ">class</span> <span class="t ">Post</span> <span class="p ">{</span><span class="c">
+  // post model
+</span><span class="p ">}</span>
 
+<span class="t ">void</span> <span class="i ">main</span><span class="p ">(</span><span class="p ">)</span> <span class="p ">{</span>
+  <span class="k ">var</span> <span class="i ">files</span> <span class="o ">=</span> <span class="i ">getMarkdownFiles</span><span class="p ">(</span><span class="p ">)</span><span class="p ">;</span>
+  <span class="k ">var</span> <span class="i ">posts</span> <span class="o ">=</span> <span class="i ">paths</span><span class="p ">.</span><span class="i ">map</span><span class="p ">(</span><span class="i ">readPost</span><span class="p ">)</span><span class="p ">;</span>
+  <span class="i ">writeIndex</span><span class="p ">(</span><span class="i ">posts</span><span class="p ">)</span><span class="p ">;</span>
+  <span class="i ">posts</span><span class="p ">.</span><span class="i ">forEach</span><span class="p ">(</span><span class="i ">writePost</span><span class="p ">)</span><span class="p ">;</span>
+<span class="p ">}</span>
+
+<span class="t ">List</span><span class="o ">&lt;</span><span class="t ">File</span><span class="o ">&gt;</span> <span class="i ">getMarkdownFiles</span><span class="p ">(</span><span class="p ">)</span> <span class="p ">{</span><span class="c">
+  // get markdown files
+</span><span class="p ">}</span>
+
+<span class="t ">Post</span> <span class="i ">readPost</span><span class="p ">(</span><span class="t ">File</span> <span class="i ">file</span><span class="p ">)</span> <span class="p ">{</span><span class="c">
+  // read file
+  // parse haml
+  </span><span class="k ">return</span> <span class="i ">post</span><span class="p ">;</span>
+<span class="p ">}</span>
+
+<span class="t ">void</span> <span class="i ">writeIndex</span><span class="p ">(</span><span class="t ">List</span><span class="o ">&lt;</span><span class="t ">Post</span><span class="o ">&gt;</span> <span class="i ">posts</span><span class="p ">)</span> <span class="p ">{</span><span class="c">
+  // markdown to html
+  // write file
+</span><span class="p ">}</span>
+
+<span class="t ">void</span> <span class="i ">writePost</span><span class="p ">(</span><span class="t ">Post</span> <span class="i ">post</span><span class="p ">)</span> <span class="p ">{</span><span class="c">
+  // markdown to html
+  // write file
+</span><span class="p ">}</span></pre>
+<h2>Markdown</h2>
+<p>Most of the lifting will be done by the Markdown to HTML library. Dartdoc, a 
+documentation tool that ships with the SDK, includes an approachable parser and 
+HTML renderer. Unfortunately, using it outside of dartdoc took some work.</p>
+<p>I found another project using the parser on github, where it was referenced 
+using a <code>sdk:dartdoc</code> pubspec dependency, although this no longer works as 
+dartdoc has been moved from <code>dart-sdk/pkg</code> to <code>dark-sdk/lib/_internal</code>. I 
+eventually found a workaround by copying <code>_private</code> to my project. I've asked 
+for a better solution on the [mailing list][mailing].</p>
+<p>I can now parse Markdown like a boss:</p>
+<pre><span class="k ">import</span> <span class="s si">'_internal/dartdoc/lib/markdown.dart'</span><span class="p ">;</span>
+
+<span class="t ">void</span> <span class="i ">main</span><span class="p ">(</span><span class="p ">)</span> <span class="p ">{</span>
+  <span class="i ">print</span><span class="p ">(</span><span class="i ">markdownToHtml</span><span class="p ">(</span><span class="s si">"Hello *World*"</span><span class="p ">)</span><span class="p ">)</span><span class="p ">;</span>
+<span class="p ">}</span></pre>
+<h2>YAML</h2>
+<p>The [YAML[yaml] library used to parse pubspec files does what is says on the 
+box, parsing a document into a stream of key/value pairs. In this case it will 
+be easier to create a lookup:</p>
+<pre><span class="t ">void</span> <span class="i ">main</span><span class="p ">(</span><span class="p ">)</span> <span class="p ">{</span>
+  <span class="k ">var</span> <span class="i ">values</span> <span class="o ">=</span> <span class="k ">new</span> <span class="t ">Map</span><span class="p ">(</span><span class="p ">)</span><span class="p ">;</span>
+  <span class="i ">loadYaml</span><span class="p ">(</span><span class="s si">'foo: 10'</span><span class="p ">)</span><span class="p ">.</span><span class="i ">forEach</span><span class="p ">(</span><span class="p ">(</span><span class="i ">k</span><span class="p ">,</span> <span class="i ">v</span><span class="p ">)</span> <span class="a ">=&gt;</span> <span class="i ">values</span><span class="p ">[</span><span class="i ">k</span><span class=" ">]</span> <span class="o ">=</span> <span class="i ">v</span><span class="p ">)</span><span class="p ">;</span>
+  <span class="i ">print</span><span class="p ">(</span><span class="i ">values</span><span class="p ">[</span><span class="i ">foo</span><span class=" ">]</span><span class="p ">)</span><span class="p ">;</span>
+<span class="p ">}</span></pre>
+<h2>Templates</h2>
+<p>It seems like the Dart team has <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups=#!topic/misc/o8SWaMrjDgA">plans for templates</a>. For 
+now, Seth Ladd's implementation meets my basic needs, so I'll stick with that:</p></div></article><article><header><h1>A Simple Dart Blogging Engine</h1><span>Friday, 15 February 2013</span></header><div><p>This blog documents my experiences learning <a href="http://www.dartlang.org">Dart</a>, getting to know the 
+<a href="http://www.dartlang.org/docs/spec">language</a>, <a href="http://www.dartlang.org/docs/dart-up-and-running/contents/ch03.html">libraries</a>, <a href="http://www.dartlang.org/docs/editor">toolchain</a>, and 
+<a href="https://groups.google.com/a/dartlang.org/forum">community</a>. As a learning project I'll be building a simple static 
+site generator similar to <a href="http://jekyllrb.com">Jekyll</a>. I don't have big plans for the 
+project, but hopefully others will find it a useful reference.</p>
+<p>The source for this site is available on <a href="https://github.com/dpeek/blog">GitHub</a>.</p>
+<h2>Objectives</h2>
+<p>The basic goal is to convert a collection of <a href="http://daringfireball.net/projects/markdown">Markdown</a> documents 
+into HTML: an index/archive and a page for each post. Additional post metadata 
+(title, tags) will be defined in a <a href="yaml">YAML</a> front matter, parsed into a 
+model and used to generate each page.</p>
+<p>So here are the requirements:</p><ul><li>Listing and reading markdown from the file system</li><li>Parsing the YAML front matter</li><li>Converting Markdown to HTML, hopefully with support for syntax highlighting</li><li>Generating HTML for the index/pages from templates</li><li>Paginating the index (once I have enough posts)</li><li>Generating an RSS feed</li></ul>
+<h2>Next steps</h2>
+<p>Next up I'll look at what's available already on <a href="http://pub.dartlang.org">pub</a> that meets my 
+needs. No point inventing wheels where I don't have to (as much as I love 
+reinventing wheels).</p></div></article>
+  </div>
 </body>
 </html>
