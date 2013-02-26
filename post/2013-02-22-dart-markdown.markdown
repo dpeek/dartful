@@ -4,8 +4,8 @@ date: 2013-02-22 23:53
 ---
 
 Minor detour. My questions on the [dart mailing list][list] have lead to my 
-first library on [pub.dartlang.org][pub]. I can't take credit for the code (I 
-think [Bob Nystrom][munificent] write most of it), but I'm happy to make 
+first library on [pub.dartlang.org][pub]. While I can't take credit for the 
+code (I think [Bob Nystrom][munificent] wrote most of it), I'm happy to make 
 myself useful by maintaining and building on it.
 
 Extracting the library from Dartdoc meant removing support for Dart syntax 
