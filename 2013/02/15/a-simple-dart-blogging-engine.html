@@ -14,22 +14,21 @@
         <h1>A Simple Dart Blogging Engine</h1>
         <span>Friday, 15 February 2013</span>
       </header>
-      <div><p>This blog documents my experiences learning <a href="http://www.dartlang.org">Dart</a>, getting to know the 
+      <div><p>This blog documents my experience learning <a href="http://www.dartlang.org">Dart</a>, getting to know the 
 <a href="http://www.dartlang.org/docs/spec">language</a>, <a href="http://www.dartlang.org/docs/dart-up-and-running/contents/ch03.html">libraries</a>, <a href="http://www.dartlang.org/docs/editor">toolchain</a>, and 
 <a href="https://groups.google.com/a/dartlang.org/forum">community</a>. As a learning project I'll be building a simple static 
 site generator similar to <a href="http://jekyllrb.com">Jekyll</a>. I don't have big plans for the 
 project, but hopefully others will find it a useful reference.</p>
 <p>The source for this site is available on <a href="https://github.com/dpeek/blog">GitHub</a>.</p>
 <h2>Objectives</h2>
-<p>The basic goal is to convert a collection of <a href="http://daringfireball.net/projects/markdown">Markdown</a> documents 
-into HTML: an index/archive and a page for each post. Additional post metadata 
-(title, tags) will be defined in a <a href="yaml">YAML</a> front matter, parsed into a 
-model and used to generate each page.</p>
-<p>So here are the requirements:</p><ul><li>Listing and reading markdown from the file system</li><li>Parsing the YAML front matter</li><li>Converting Markdown to HTML, hopefully with support for syntax highlighting</li><li>Generating HTML for the index/pages from templates</li><li>Paginating the index (once I have enough posts)</li><li>Generating an RSS feed</li></ul>
+<p>The goal is to convert a collection of <a href="http://daringfireball.net/projects/markdown">Markdown</a> documents into 
+HTML: an index and a page for each post. Additional post metadata will be 
+defined in a block of <a href="yaml">YAML</a> before the content, parsed into a model and 
+used to generate each page.</p>
+<p>Here are the requirements:</p><ul><li>Listing and reading markdown from the file system</li><li>Parsing the YAML metadata</li><li>Converting Markdown to HTML, hopefully with support for syntax highlighting</li><li>Generating HTML for the index and pages from templates</li><li>Paginating the index (once I have enough posts)</li><li>Generating an RSS feed</li></ul>
 <h2>Next steps</h2>
-<p>Next up I'll look at what's available already on <a href="http://pub.dartlang.org">pub</a> that meets my 
-needs. No point inventing wheels where I don't have to (as much as I love 
-reinventing wheels).</p></div>
+<p>Next I'll look at what's available already on <a href="http://pub.dartlang.org">pub</a> that meets my needs. 
+No point inventing wheels I don't have to (as much as I love wheels).</p></div>
     </article>
   </div>
 </body>
